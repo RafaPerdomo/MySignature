@@ -56,7 +56,7 @@ public class CaptureSignature extends Activity {
 
         tempDir = Environment.getRootDirectory() + "/" + getResources().getString(R.string.external_dir) + "/";
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getDir(getResources().getString(R.string.external_dir), Context.MODE_ENABLE_WRITE_AHEAD_LOGGING);
+        File directory = cw.getDir(getResources().getString(R.string.external_dir), Context.MODE_PRIVATE);
 
         prepareDirectory();
         uniqueId = getTodaysDate() + "_" + getCurrentTime() + "_" + Math.random();
@@ -247,10 +247,8 @@ public class CaptureSignature extends Activity {
                 String url = Images.Media.insertImage(getContentResolver(), mBitmap, "title", null);
                 Log.v("log_tag", "url: " + url);
                 Log.v("log_tag","Path: " + mypath.getAbsolutePath().toString());
-                //In case you want to delete the file
-                //boolean deleted = mypath.delete();
-                //Log.v("log_tag","deleted: " + mypath.toString() + deleted);
-                //If you want to convert the image to string use base64 converter
+                Log.v("log_tag","mbbitmap: " + mBitmap.toString());
+
 
             }
             catch(Exception e)

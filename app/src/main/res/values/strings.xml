@@ -1,5 +1,13 @@
 <resources>
-    <string name="hello">CaptureSignatureActivity!</string>
+    <string name="TopName">CaptureSignature</string>
     <string name="app_name">CaptureSignature</string>
     <string name="external_dir">GetSignature</string>
+    <string name="GetmyS">GET MY SIGNATURE</string>
+    <string name="Save">Save</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Clear">Clear</string>
+    <string name="yourName">Your name</string>
+    <string name="PleaseSB">Please Sign below ...</string>
+    <string name="SignatureCS">Signature capture successful!</string>
+
 </resources>
