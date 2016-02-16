@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:id="@+id/linearLayout1"
-    android:layout_width="600dp"
+    android:layout_width="400dp"
     android:layout_height="400dp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout2"
-        android:layout_width="385dp">
+        android:layout_width="379dp">
 
         <Button
             android:layout_height="50dp"
@@ -87,8 +87,8 @@
     </TableLayout>
 
     <LinearLayout
-        android:layout_height="match_parent"
+        android:layout_height="209dp"
         android:id="@+id/linearLayout"
-        android:layout_width="380dp"
+        android:layout_width="383dp"
         android:orientation="vertical" />
 </LinearLayout>

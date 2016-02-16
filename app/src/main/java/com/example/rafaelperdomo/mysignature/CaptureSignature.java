@@ -9,15 +9,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore.Images;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -44,8 +47,6 @@ public class CaptureSignature extends Activity {
     private Bitmap mBitmap;
     View mView;
     File mypath;
-    private EditText Name ;
-
     private String uniqueId;
     private EditText yourName;
 
@@ -55,70 +56,50 @@ public class CaptureSignature extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.signature);
-        Name = (EditText) findViewById(R.id.yourName);
-
-                tempDir = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.external_dir) + "/";
-       /* ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getDir(getResources().getString(R.string.external_dir), Context.MODE_APPEND);*/
-        File directory = new File(tempDir);
-        prepareDirectory();
-        uniqueId = Name.toString()+"_"+getTodaysDate() + "_" + getCurrentTime();
-        current = uniqueId + ".png";
-        mypath= new File(directory,current);
-        Log.e("log-directory",directory.toString());
-        Log.e("log-mypath",mypath.toString());
-
+        yourName = (EditText) findViewById(R.id.yourName);
         mContent = (LinearLayout) findViewById(R.id.linearLayout);
         mSignature = new signature(this, null);
         mSignature.setBackgroundColor(Color.WHITE);
         mContent.addView(mSignature, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        mClear = (Button)findViewById(R.id.clear);
-        mGetSign = (Button)findViewById(R.id.getsign);
+        mClear = (Button) findViewById(R.id.clear);
+        mGetSign = (Button) findViewById(R.id.getsign);
         mGetSign.setEnabled(false);
-        mCancel = (Button)findViewById(R.id.cancel);
+        mCancel = (Button) findViewById(R.id.cancel);
         mView = mContent;
 
-        yourName = (EditText) findViewById(R.id.yourName);
 
-        mClear.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        mClear.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
                 Log.v("log_tag", "Panel Cleared");
                 mSignature.clear();
                 mGetSign.setEnabled(false);
             }
         });
 
-        mGetSign.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {   // Assume thisActivity is the current activity
-                Log.v("log_tag", "Panel Saved");
+        mGetSign.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {   // Assume thisActivity is the current activity
                 boolean error = captureSignature();
-                if(!error){
+                if (!error) {
                     mView.setDrawingCacheEnabled(true);
                     mSignature.save(mView);
                     Bundle b = new Bundle();
                     b.putString("status", "done");
                     Intent intent = new Intent();
                     intent.putExtras(b);
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
 
-        mCancel.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        mCancel.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
                 Log.v("log_tag", "Panel Canceled");
                 Bundle b = new Bundle();
                 b.putString("status", "cancel");
                 Intent intent = new Intent();
                 intent.putExtras(b);
-                setResult(RESULT_OK,intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -144,7 +125,7 @@ public class CaptureSignature extends Activity {
 
         if(error){
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP, 105, 50);
+            toast.setGravity(Gravity.TOP,Gravity.CENTER, Gravity.CENTER);
             toast.show();
         }
 
@@ -233,10 +214,17 @@ public class CaptureSignature extends Activity {
             paint.setStrokeWidth(STROKE_WIDTH);
         }
 
+
         public void save(View v)
         {
-            Log.v("log_tag", "Width: " + v.getWidth());
-            Log.v("log_tag", "Height: " + v.getHeight());
+            tempDir = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.external_dir) + "/";
+       /* ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir(getResources().getString(R.string.external_dir), Context.MODE_APPEND);*/
+            File directory = new File(tempDir);
+            prepareDirectory();
+            uniqueId = yourName.getText().toString()+"_"+getTodaysDate() + "_" + getCurrentTime();
+            current = uniqueId + ".png";
+            mypath= new File(directory,current);
             if(mBitmap == null)
             {
                 mBitmap =  Bitmap.createBitmap (mContent.getWidth(), mContent.getHeight(), Bitmap.Config.RGB_565);;
@@ -246,12 +234,11 @@ public class CaptureSignature extends Activity {
             {
                 FileOutputStream mFileOutStream = new FileOutputStream(mypath);
                 v.draw(canvas);
-                mBitmap.compress(Bitmap.CompressFormat.PNG,10, mFileOutStream);
+                mBitmap.compress(Bitmap.CompressFormat.PNG, 1, mFileOutStream);
                 mFileOutStream.flush();
                 String url = Images.Media.insertImage(getContentResolver(), mBitmap, "title", null);
-                Log.v("log_tag", "url: " + url);
                 Log.v("log_tag","Path: " + mypath.getAbsolutePath().toString());
-                Log.v("log_tag","mbbitmap: " + mBitmap.toString());
+                Log.v("log_tag", "mbbitmap: " + mBitmap.toString());
 
 
             }
@@ -259,6 +246,7 @@ public class CaptureSignature extends Activity {
             {
                 Log.v("log_tag", e.toString());
             }
+
         }
 
         public void clear()

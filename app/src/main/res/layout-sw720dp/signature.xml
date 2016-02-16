@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:id="@+id/linearLayout1"
-    android:layout_width="400dp"
-    android:layout_height="400dp"
+    android:layout_width="800dp"
+    android:layout_height="600dp"
     android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center_horizontal|top"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -57,8 +59,7 @@
                 android:id="@+id/yourName"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:maxLength="30"
-                android:text="4">
+                android:maxLength="30">
 
                 <requestFocus />
             </EditText>
@@ -90,6 +91,7 @@
     <LinearLayout
         android:layout_height="182dp"
         android:id="@+id/linearLayout"
-        android:layout_width="389dp"
-        android:orientation="vertical" />
+        android:layout_width="428dp"
+        android:orientation="vertical"
+        android:layout_weight="0.14" />
 </LinearLayout>
