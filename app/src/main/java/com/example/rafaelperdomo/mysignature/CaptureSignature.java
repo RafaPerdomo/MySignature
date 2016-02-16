@@ -30,6 +30,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class CaptureSignature extends Activity {
@@ -43,6 +44,7 @@ public class CaptureSignature extends Activity {
     private Bitmap mBitmap;
     View mView;
     File mypath;
+    private EditText Name ;
 
     private String uniqueId;
     private EditText yourName;
@@ -53,16 +55,18 @@ public class CaptureSignature extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.signature);
+        Name = (EditText) findViewById(R.id.yourName);
 
-        tempDir = Environment.getRootDirectory() + "/" + getResources().getString(R.string.external_dir) + "/";
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getDir(getResources().getString(R.string.external_dir), Context.MODE_PRIVATE);
-
+                tempDir = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.external_dir) + "/";
+       /* ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir(getResources().getString(R.string.external_dir), Context.MODE_APPEND);*/
+        File directory = new File(tempDir);
         prepareDirectory();
-        uniqueId = getTodaysDate() + "_" + getCurrentTime() + "_" + Math.random();
+        uniqueId = Name.toString()+"_"+getTodaysDate() + "_" + getCurrentTime();
         current = uniqueId + ".png";
         mypath= new File(directory,current);
-
+        Log.e("log-directory",directory.toString());
+        Log.e("log-mypath",mypath.toString());
 
         mContent = (LinearLayout) findViewById(R.id.linearLayout);
         mSignature = new signature(this, null);
@@ -242,7 +246,7 @@ public class CaptureSignature extends Activity {
             {
                 FileOutputStream mFileOutStream = new FileOutputStream(mypath);
                 v.draw(canvas);
-                mBitmap.compress(Bitmap.CompressFormat.JPEG, 10, mFileOutStream);
+                mBitmap.compress(Bitmap.CompressFormat.PNG,10, mFileOutStream);
                 mFileOutStream.flush();
                 String url = Images.Media.insertImage(getContentResolver(), mBitmap, "title", null);
                 Log.v("log_tag", "url: " + url);
